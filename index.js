@@ -19,7 +19,7 @@ const courseSchema = new mongoose.Schema({
 
 const Course = mongoose.model('Course', courseSchema)
 
-// Create a dataset.......
+// Create a dataset(documents).......
 async function createCourse() {
     const course = new Course({
         name: 'Node.js Course',
@@ -42,12 +42,23 @@ async function getCourses() {
     console.log(courses)
 }
 
-// Comparison query operators(eq(equal), ne(not equal), gt(greater than), gte(greater than or equal to), lt(less than), lte(less than or equal to), in-> {$in: [3, 4.2]}, nin(not in))
+// Sorting courses on basis of name in ascending order {name: 1} and in descending order {name: -1}
+async function getCourses() {
+    const courses = await Course
+    .find({creator: 'John Doe'})
+    .select({name: 1})
+    .sort({name: 1})
+
+    console.log(courses)
+}
+
+// Comparison query operators($eq(equal), $ne(not equal), $gt(greater than), $gte(greater than or equal to), $lt(less than), $lte(less than or equal to), $in-> {$in: [3, 4.2]}, $nin(not in))
 
 async function getCourses() {
     const courses = await Course
     .find({rating: {$gte: 4}})
     .select({name: 1})
+
     console.log(courses)
 }
 
@@ -55,11 +66,14 @@ async function getCourses() {
 
 async function getCourses() {
     const courses = await Course
-    .find({rating: {$in: [3, 4.2, 4.5,4.3]}})
+    .find({rating: {$in: [3, 4.2, 4.5, 4.3]}})
     .select({name: 1})
     .or([{name: 'Node.js Course'}, {isPublished: true}])
+
     console.log(courses)
 }
+
+getCourses()
 
 // Update a course.....
 
@@ -114,12 +128,12 @@ async function createCourse1() {
 }
 // OR using validate function.....(In try catch block)
 
-try{
-    const result = await course.validate()
-}
-catch(err){
-    console.log(err.message)
-}
+// try{
+//     const result = await course.validate()
+// }
+// catch(err){
+//     console.log(err.message)
+// }
 
 
 // Inbuild Validation in Mongoose........
